@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "/src/index.html",
+  "type": "module",
   "scripts": {
-    "dev": "vite src/",
-    "build": "vite build src/"
+    "dev": "vite --config vite.config.js src/",
+    "build": "vite --config vite.config.js build src/"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
     "vite": "^6.2.5"
   },
   "devDependencies": {
-    "@types/three": "^0.175.0"
+    "@types/three": "^0.175.0",
+    "vite-plugin-glsl": "^1.4.0"
   }
 }
