@@ -1,0 +1,56 @@
+
+### NETWORK CENTER ###
+
+host_networks:
+  shared:
+  # public_network_center
+    - name: "{{public_network_center.network_backend.name}}"
+      ipam_options: "{{public_network_center.network_backend.ipam_options}}"
+      traefik_ip: "{{public_network_center.network_backend.ips.traefik}}"
+      tailscale_ip: "{{public_network_center.network_backend.ips.tailscale}}"
+  traefik_specific: # these containers don't have Tailscale DNS and connection-ability
+  # nginx_file_server
+    - name: "{{nginx_file_server.network_backend.name}}"
+      ipam_options: "{{nginx_file_server.network_backend.ipam_options}}"
+      traefik_ip: "{{nginx_file_server.network_backend.traefik_ips.traefik}}"
+### TRAEFIK SERVICE SPECIFIC VARS ###
+
+network_center:
+  network_backend:
+    name: "traefik_tailscale"
+    ipam_options:
+    - subnet: "10.140.0.0/29"
+      gateway: "10.140.0.1"
+    ips:
+      traefik: "10.140.0.2"
+      tailscale: "10.140.0.4"
+  traefik_domain: "traefik.webvm.wiresndreams.dev"
+
+# domains for ssl
+# remember to setup CAA and A records
+public_domains:
+- "dev.wiresndreams.dev"
+- "dev.blog.wiresndreams.dev"
+- "dev.homelab.wiresndreams.dev"
+- "dev.tools.homelab.wiresndreams.dev"
+
+
+### EXPENSEOWL SERVICE SPECIFIC VARS ###
+
+nginx_file_server:
+  name: "nginx_file_server"
+  network_backend:
+    name: "t3_expenseowl"
+    ipam_options:
+    - subnet: "10.110.32.0/29"
+      gateway: "10.110.32.1"
+    traefik_ips:
+      traefik: "10.110.32.2"
+      expenseowl: "10.110.32.3"
+
+site_path_in_repo: "site"
+site_paths:
+- "main"
+- "blog"
+- "homelab"
+- "homelab-tools"

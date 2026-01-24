@@ -1,0 +1,38 @@
+serversTransport:
+  insecureSkipVerify: true
+
+entryPoints:
+  # metrics:
+  #   address: ":9100"
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+    http3: {}
+
+# metrics:
+#   prometheus:
+#     entryPoint: metrics
+#     addEntryPointsLabels: true
+#     addRoutersLabels: true
+#     addServicesLabels: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+
+  file:
+    directory: /configs/
+    watch: false
+
+api:
+  dashboard: true
+
+log:
+  level: info

@@ -1,0 +1,19 @@
+{
+    "ProjectName": "public_network_center",
+    "NetworkSetup": "shared",
+    "UserGateDetails": {},
+    "DirectoriesToCreate": [
+        "tailscale",
+        "traefik/data"
+    ],
+    "TemplatesRemoteRelativePaths": {
+        "traefik_dynamic.yml": "traefik/data/traefik_dynamic.yml"
+    },
+    "FilesRemoteRelativePaths": {
+        "traefik_static.yml": "traefik/data/traefik_static.yml"
+    },
+    "UserGateHost": "dusk",
+    "Hosts": [
+        "webvm"
+    ]
+}

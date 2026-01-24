@@ -1,0 +1,45 @@
+# On Successfully Built Changes
+name: CI Pull Homelab Vitepress docs site
+
+on:
+  workflow_call:
+    inputs:
+      artifact_name:
+        required: true
+        type: string
+
+jobs:
+  docs-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Reset destination directory
+        run: |
+          rm -rf site/pull-content/homelab
+          mkdir -p site/pull-content/homelab
+
+      - name: Download Vitepress Docs artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ inputs.artifact_name }}
+          path: site/pull-content/homelab
+
+      # Commit and Push Changes
+      - name: Commit and Push Changes
+        run: |
+          # configure user
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+
+          # stage any file changes to be committed
+          git add .
+
+          # make commit with staged changes
+          git commit -m 'Updated Site Pull-Content: Homelab Docs'
+
+          # push the commit back up to source GitHub repository
+          git push

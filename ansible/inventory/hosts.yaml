@@ -1,0 +1,9 @@
+myhosts:
+  hosts:
+    webvm:
+        ansible_host:
+        ansible_become: yes
+        ansible_become_method: sudo
+        ansible_connection: ssh
+        ansible_user: ansible
+        ansible_python_interpreter: "/usr/bin/python3.11"

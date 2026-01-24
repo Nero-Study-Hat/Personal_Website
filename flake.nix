@@ -27,11 +27,17 @@
 					sops
 					age
                     nodejs_25
+                    act
+                    awscli2
+                    python3
 				];
 
+                    # export AWS_PROFILE="initial-admin"
 				shellHook = ''
 					echo "Starting new shell";
 					export ANSIBLE_CONFIG="ansible/ansible.cfg"
+                    export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
+                    export AWS_SDK_LOAD_CONFIG="1"
 				'';
 			};
 		}

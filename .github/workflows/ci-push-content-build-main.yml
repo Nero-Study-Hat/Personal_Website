@@ -1,0 +1,37 @@
+name: CI Site-Build Vitepress main
+# wiresndreams.dev
+
+on:
+  push:
+    paths:
+      - "site/push-content/blog/**"
+  pull_request:
+    paths:
+      - "site/push-content/blog/**"
+
+jobs:
+  docs-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install Node.js (includes npm)
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: site/push-content/blog/package-lock.json
+
+      # Install dependencies
+      - name: Install npm dependencies
+        working-directory: site/push-content/blog/
+        run: npm ci
+
+      # Vitepress build
+      - name: Build Vitepress site
+        working-directory: site/push-content/blog/
+        run: npx vitepress build

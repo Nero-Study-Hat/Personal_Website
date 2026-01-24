@@ -1,0 +1,14 @@
+{
+    "ProjectName": "nginx_file_server",
+    "NetworkSetup": "t3_only",
+    "UserGateDetails": {},
+    "DirectoriesToCreate": [],
+    "TemplatesRemoteRelativePaths": {
+        "nginx.conf": "nginx.conf"
+    },
+    "FilesRemoteRelativePaths": {},
+    "UserGateHost": "dusk",
+    "Hosts": [
+        "webvm"
+    ]
+}

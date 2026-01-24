@@ -48,4 +48,4 @@ terraform.rc
 **/.vitepress/dist
 
 # Ignore secrets dir
-/secrets
+# /secrets
