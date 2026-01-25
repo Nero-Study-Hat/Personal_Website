@@ -14,7 +14,11 @@ module "iam_group-iam-controllers" {
     create_policy                      = true
 
     policies = {
-        IAMFullAccess = "arn:aws:iam::aws:policy/IAMFullAccess",
+        IAMFullAccess               = "arn:aws:iam::aws:policy/IAMFullAccess",
+        # Console & Intergration Permissions Needed Alongside IAMFullAccess
+        AWSOrganizationsFullAccess  = "arn:aws:iam::aws:policy/AWSOrganizationsFullAccess",
+        IAMAccessAnalyzerFullAccess = "arn:aws:iam::aws:policy/IAMAccessAnalyzerFullAccess"
+
     }
 
     tags = {
@@ -59,10 +63,13 @@ module "iam_user-neostudyhat" {
 
     create_login_profile    = true
     create_access_key       = false
+    force_destroy           = true
 
+    # user and/or group(s) and/or policies / other config
+    # can be updated after passwd change and MFA setup
+    # without breaking initial manual passwd change and MFA setup  
     password_length         = 24
     password_reset_required = true
-    force_destroy           = true
 
     tags = {
         Terraform   = "true"
