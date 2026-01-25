@@ -58,6 +58,8 @@ module "iam_user-neostudyhat" {
     name = "neostudyhat"
 
     create_login_profile    = true
+    create_access_key       = false
+
     password_length         = 24
     password_reset_required = true
     force_destroy           = true
