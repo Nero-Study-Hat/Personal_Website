@@ -39,7 +39,8 @@ resource "aws_subnet" "Terraform_VPC-priv" {
 resource "aws_eip" "nat" {
     domain = "vpc"
     tags = {
-        Name = "nat-eip"
+        Name    = "nat-eip"
+        Project = var.project
     }
 }
 
@@ -48,7 +49,8 @@ resource "aws_nat_gateway" "nat" {
     allocation_id = aws_eip.nat.id
     subnet_id     = aws_subnet.Terraform_VPC-pub.id
     tags = {
-        Name = "nat-gw"
+        Name    = "nat-gw"
+        Project = var.project
     }
     depends_on = [aws_internet_gateway.Terraform_VPC-IGW]
 }
