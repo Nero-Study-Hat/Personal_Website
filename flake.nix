@@ -38,6 +38,7 @@
 					export ANSIBLE_CONFIG="ansible/ansible.cfg"
                     export DOCKER_HOST="unix:///run/user/$(id -u)/docker.sock"
                     export AWS_SDK_LOAD_CONFIG="1"
+                    export SOPS_AGE_KEY_FILE="$(realpath ./secrets)/age-private.key"
 				'';
 			};
 		}
