@@ -41,13 +41,13 @@ data "sops_file" "sops-secret" {
 }
 
 module "network" {
-    source  = "../modules/network"
+    source  = "../../modules/network"
     project = "Personal-Website"
     zone    = "us-east-1a" 
 }
 
 module "server" {
-    source             = "../modules/server"
+    source             = "../../modules/server"
     project            = "Personal-Website"
     tailscale_auth_key = data.sops_file.sops-secret.data["aws_server_ts_auth_key"]
     aws_region         = "us-east-1"

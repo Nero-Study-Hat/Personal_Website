@@ -7,12 +7,10 @@ terraform {
     }
 }
 
-### Auth ###
-
 provider "aws" {
     assume_role {
         role_arn     = "arn:aws:iam::767398065040:role/Worker-Personal-Website"
-        session_name = "terraform-dev"
+        session_name = "terraform-personal-website-map"
     }
 
     region = var.region
@@ -37,10 +35,11 @@ data "local_file" "sync_files" {
 
 # Upload each file to S3 bucket
 resource "aws_s3_object" "synced-secrets" {
-    for_each     = data.local_file.sync_files
+    for_each     = fileset(var.sync_directory, "**/*")
+
     bucket       = data.aws_s3_bucket.target_bucket.id
-    key          = "secrets/${each.key}"
-    source       = data.local_file.sync_files[each.key].filename
+    key          = "secrets/${each.value}"
+    source       = "${var.sync_directory}/${each.value}"
     content_type = "text/plain"
-    etag         = filemd5(data.local_file.sync_files[each.key].filename) # Ensure updates only for changed files
+    source_hash = filemd5("${var.sync_directory}/${each.value}") # Ensure updates only for changed files
 }
