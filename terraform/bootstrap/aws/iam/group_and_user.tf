@@ -14,6 +14,24 @@ module "iam_group-iam-controllers" {
     # note: after setting up MFA must sign out and back into have permissions
     enable_mfa_enforcement             = true
 
+    permissions = {
+        AssumeRole = {
+            actions   = [
+                "sts:AssumeRole"
+            ]
+            resources = [
+                module.iam_role-iam-controller.arn
+            ]
+        },
+        BrowserLogin = {
+            actions  = [
+                "signin:AuthorizeOAuth2Access",
+                "signin:CreateOAuth2Token"
+            ] // for login with awscli2 `aws login`
+            resources = ["*"]
+        },
+    }
+
     policies = {
         IAMFullAccess               = "arn:aws:iam::aws:policy/IAMFullAccess",
         # Console & Intergration Permissions Needed Alongside IAMFullAccess
@@ -44,13 +62,16 @@ module "iam_group-developers" {
 
     permissions = {
         AssumeRole = {
-            actions   = ["sts:AssumeRole"]
+            actions   = [
+                "sts:AssumeRole"
+            ]
             resources = [
                 module.iam_role-dev-personal-website.arn
             ]
         },
         BrowserLogin = {
             actions  = [
+                # "signin:*"
                 "signin:AuthorizeOAuth2Access",
                 "signin:CreateOAuth2Token"
             ] // for login with awscli2 `aws login`
@@ -82,4 +103,12 @@ module "iam_user-neostudyhat" {
     tags = {
         Terraform   = "true"
     }
+}
+
+resource "aws_iam_openid_connect_provider" "github" {
+    url = "https://token.actions.githubusercontent.com"
+
+    client_id_list = [
+        "sts.amazonaws.com",
+    ]
 }

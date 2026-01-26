@@ -22,7 +22,7 @@ terraform {
 
 provider "aws" {
     assume_role {
-        role_arn     = "arn:aws:iam::767398065040:role/Worker-Personal-Website"
+        role_arn     = "arn:aws:iam::767398065040:role/dev-personal-website-20260126191403988000000001"
         session_name = "terraform-dev"
     }
 
