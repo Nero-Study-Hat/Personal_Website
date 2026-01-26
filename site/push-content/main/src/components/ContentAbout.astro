@@ -1,0 +1,125 @@
+---
+import { Code } from 'astro:components';
+
+const code = `interface InfrastructureEngineer {
+    // careerStatus = starting
+    name: string;
+    interestsTech: string[];
+    interestNonTech: string[];
+};
+
+interface TechStack {
+     iac: string[];
+    networking: string[];
+    linux: string[];
+    programming: string[];
+    scripting: string[];
+    cloud: string[];
+};
+
+const techStack: TechStack = {
+    iac: [
+        'Terraform',
+        'Ansible',
+        'Docker',
+        'Docker Compose',
+        'Nix Flakes',
+        'NixOS',
+        'Cloud-Init'
+    ],
+    networking: [
+        // ACLs for zero-trust traffic management through a mesh network
+        'Tailscale VPN',
+        // Interfaces, VLANs, DHCP, Firewall Rules
+        'OPNSense Firewall',
+        // Bridge and Macvlan Networks, Docker Compose management
+        'Docker Networking'
+    ],
+    linux = [
+        'NixOS',        // using as main driver
+        'Debian',       // using for servers in Homelab
+        'Arch',         // used to main drive Arch
+        'Red Hat based' // used to main drive Fedora
+    ],
+    programming: [
+        'C#',  // custom tools and Godot game dev
+        'Nix', // dev Nix flakes and NixOS configs
+    ],
+    scripting: [
+        'Python',
+        'Bash'
+    ],
+    cloud: [
+        'AWS'
+    ]
+};
+
+// Infrastructure Engineer profile
+const me: InfrastructureEngineer = {
+    name: 'Daniel Giszpenc | NeoStudyHat',
+    interests: [
+        'Open Source',
+        'Security',
+        'Privacy',
+        'Performance',
+        'Self-Hosting',
+        'Networking'
+    ],
+    interestNonTech: [
+        'Creative Writing',
+        'Digitial Art',
+        'Ping Pong',
+        'Video Editing'
+    ]
+};
+
+type ContactType = 'github' | 'linkedIn' | 'email';
+
+// Contact function
+const contact = (type: ContactType): string => {
+    switch (type) {
+        case 'github':
+            // in process of rebranding to NeoStudyHat cause Rome and Matrix
+            return 'https://github.com/Nero-Study-Hat';
+        case 'linkedIn':
+            return 'https://www.linkedin.com/in/daniel-giszpenc-26b854368';
+        case 'email':
+            return 'danielgiszpenc@gmail.com';
+        default:
+            return 'Send fax.';
+    }
+};
+
+`;
+---
+
+<Code
+    code={code}
+    lang="js"
+    wrap={true}
+/>
+
+<style is:global>
+
+    /* Custom styling for code block line numbers */
+    pre.astro-code {
+        @apply bg-transparent !important;
+    }
+
+    pre.astro-code code {
+        @apply block;
+        counter-reset: step;
+        counter-increment: step 0;
+    }
+
+    pre.astro-code code .line {
+        @apply relative;
+    }
+
+    pre.astro-code code .line::before {
+        content: counter(step);
+        counter-increment: step;
+        @apply text-gray-600 pr-2;
+    }
+
+</style>

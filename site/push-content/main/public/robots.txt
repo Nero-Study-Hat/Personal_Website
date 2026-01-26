@@ -1,0 +1,3 @@
+User-agent: *
+
+Sitemap: https://wiresndreams.dev/sitemap-index.xml
