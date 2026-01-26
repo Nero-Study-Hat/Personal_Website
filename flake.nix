@@ -27,6 +27,7 @@
 					sops
 					age
                     nodejs_25
+                    yarn
                     act
                     awscli2
                     python3
