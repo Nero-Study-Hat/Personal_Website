@@ -1,4 +1,4 @@
-name: CI Check Ansible drift from role_data
+name: Check for end Ansible role drift from role_data.
 
 on:
   push:
@@ -17,17 +17,13 @@ jobs:
       # Checkout the repository
       - name: Checkout current repository
         uses: actions/checkout@v4
+        with:
+          ref: feat/v1-safe-end-services
 
       - name: Checkout Service Config Generator repository
-        uses: actions/checkout@v4
-        with:
-          repository: Nero-Study-Hat/Homelab-Tools
-          path: tools-repo
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '9.0.x'
+        run: |
+          git clone https://github.com/Nero-Study-Hat/Homelab-Tools.git
+          mv "Homelab-Tools" "tools-repo"
 
       - name: Create build output directory for the tool
         run: mkdir -p role-data-build
@@ -35,8 +31,13 @@ jobs:
       - name: Create a new input.txt file and write headless inputs
         working-directory: tools-repo/service_config_generator/app
         run: |
-          realpath "$GITHUB_WORKSPACE/ansible/role_data" >> input.txt
+          realpath "$GITHUB_WORKSPACE/ansible/roles_data" >> input.txt
           echo "$GITHUB_WORKSPACE/role-data-build" >> input.txt
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '9.0.x'
 
       - name: Build role data from current repository
         working-directory: tools-repo/service_config_generator/app
