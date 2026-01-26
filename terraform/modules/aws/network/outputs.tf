@@ -19,6 +19,11 @@ output "nat_gateway_ip" {
     value       = aws_eip.nat.public_ip
 }
 
+output "minimal_security_group_id" {
+    description = "Security group used for servers in private subnet"
+    value       = aws_security_group.private_instance.id
+}
+
 # output "tailscale_security_group_id" {
 #     description = "Security group used by VPC"
 #     value       = aws_security_group.main.id

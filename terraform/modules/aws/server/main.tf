@@ -9,6 +9,26 @@ module "tailscale" {
     hostname       = "aws-tailscale-server"
 }
 
+# Combine Tailscale and custom Cloud-Init using cloudinit_config data source
+data "cloudinit_config" "combined" {
+    gzip          = false
+    base64_encode = true
+
+    # Tailscale configuration (decode first since module provides base64)
+    part {
+        content_type = "text/cloud-config"
+        content      = base64decode(module.tailscale.rendered)
+        merge_type   = "list(append)+dict(recurse_array)+str()"
+    }
+
+    # Custom configuration
+    part {
+        content_type = "text/cloud-config"
+        content      = file("${path.module}/../../../../cloud_init/aws_conf.yml")
+        merge_type   = "list(append)+dict(recurse_array)+str()"
+    }
+}
+
 data "aws_ami" "ubuntu" {
     most_recent = true
 
@@ -30,10 +50,11 @@ resource "aws_instance" "web" {
     instance_type   = "t3.micro"
     subnet_id       = var.private_subnet_id
     # security_groups = [var.security_group_id]
+    vpc_security_group_ids = [var.security_group_id]
 
     ebs_optimized = true
 
-    user_data_base64            = module.tailscale.rendered
+    user_data_base64            = data.cloudinit_config.combined.rendered
     associate_public_ip_address = false
 
     metadata_options {

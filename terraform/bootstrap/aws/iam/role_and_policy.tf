@@ -13,6 +13,7 @@ module "iam_role-iam-controller" {
             // more strict, needs terraform re-run to add new users
             // and sets explicit trust relationship here that user must
             // be in the iam-controller group, not just role assume permission
+            // having this ensure if I forget one that is more easily found
             principals = [{
                 type = "AWS"
                 # identifiers = module.iam_group-iam-controllers.users[*]
@@ -131,25 +132,207 @@ module "iam_role-dev-personal-website" {
 
 data "aws_iam_policy_document" "dev-personal-website" {
     statement {
-        sid = "DevPersonalWebsiteTerraform"
-
+        sid     = "AllowCreateWithCorrectProjectTag"
+        effect  = "Allow"
         actions = [
-            "ec2:*",
-            "dynamodb:*",
-            "elasticloadbalancing:*"
+            "ec2:CreateVpc",
+            "ec2:CreateInternetGateway",
+            "ec2:AttachInternetGateway",
+            "ec2:CreateSubnet",
+            "ec2:CreateNatGateway",
+            "ec2:CreateRouteTable",
+            "ec2:CreateRoute",
+            "ec2:AssociateRouteTable",
+            "ec2:AllocateAddress",
+            "ec2:CreateVolume",
+            "elasticloadbalancing:Create*",
+            "dynamodb:CreateTable"
         ]
+        resources = ["*"]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:RequestTag/Project"
+            values = ["Personal-Website"]
+        }
+    }
 
-        resources = [
-            "*"
+    statement {
+        sid       = "AllowCreateSecurityGroupWithTag"
+        effect    = "Allow"
+        actions   = ["ec2:CreateSecurityGroup"]
+        resources = ["arn:aws:ec2:*:*:security-group/*"]
+        // condition breaks
+        # condition {
+        #     test     = "StringEquals"
+        #     variable = "aws:RequestTag/Project"
+        #     values   = ["Personal-Website"]
+        # }
+    }
+
+    statement {
+        sid       = "AllowCreateSecurityGroupInVpc"
+        effect    = "Allow"
+        actions   = ["ec2:CreateSecurityGroup"]
+        resources = ["arn:aws:ec2:*:*:vpc/*"]
+    }
+
+    statement {
+        sid     = "AllowSecurityGroupRuleManagement"
+        effect  = "Allow"
+        actions = [
+            "ec2:AuthorizeSecurityGroupEgress",
+            "ec2:AuthorizeSecurityGroupIngress",
+            "ec2:RevokeSecurityGroupEgress",
+            "ec2:RevokeSecurityGroupIngress"
         ]
-
+        resources = ["arn:aws:ec2:*:*:security-group/*"]
         condition {
             test     = "StringEquals"
             variable = "aws:ResourceTag/Project"
+            values   = ["Personal-Website"]
+        }
+    }
 
-            values = [
-                "Personal-Website"
-            ]
+    statement {
+        sid     = "AllowRunInstancesWithProjectTag"
+        effect  = "Allow"
+        actions = [
+            "ec2:RunInstances"
+        ]
+        resources = [
+            "arn:aws:ec2:*:*:instance/*",
+            "arn:aws:ec2:*:*:volume/*"
+        ]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:RequestTag/Project"
+            values   = ["Personal-Website"]
+        }
+    }
+
+    statement {
+        sid     = "AllowRunInstancesOnSupportingResources"
+        effect  = "Allow"
+        actions = [
+            "ec2:RunInstances"
+        ]
+        resources = [
+            "arn:aws:ec2:*:*:subnet/*",
+            "arn:aws:ec2:*:*:network-interface/*",
+            "arn:aws:ec2:*:*:security-group/*",
+            "arn:aws:ec2:*:*:key-pair/*",
+            "arn:aws:ec2:*:*:image/*"
+        ]
+    }
+
+    statement {
+        sid     = "AllowRunInstancesOnVolumes"
+        effect  = "Allow"
+        actions = ["ec2:RunInstances"]
+        resources = ["arn:aws:ec2:*:*:volume/*"]
+    }
+
+    statement {
+        sid     = "AllowDescribeOperations"
+        effect  = "Allow"
+        actions = [
+            // make res when created visible to terraform
+            "ec2:Describe*",
+            "elasticloadbalancing:Describe*",
+            "dynamodb:Describe*",
+            "dynamodb:List*"
+        ]
+        resources = ["*"]
+    }
+
+    // note: if no sec group added to an instance, one with
+    // no tag will be attempted to be added and the terraform
+    // apply will break, always use a minimal sg to prevent default issue
+    statement {
+        sid     = "DenyCreateWithoutProjectTag"
+        effect  = "Deny"
+        actions = [
+            "ec2:CreateVpc",
+            "ec2:AllocateAddress",
+            "ec2:CreateVolume",
+            "elasticloadbalancing:Create*",
+            "dynamodb:CreateTable"
+        ]
+        resources = ["*"]
+        condition {
+            test     = "Null"
+            variable = "aws:RequestTag/Project"
+            values = ["true"]
+        }
+    }
+
+    statement {
+        sid     = "AllowOperateOnlyOnTaggedResources"
+        effect  = "Allow"
+        actions = [
+            "ec2:*",
+            "elasticloadbalancing:*",
+            "dynamodb:*"
+        ]
+        resources = ["*"]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:ResourceTag/Project"
+            values = ["Personal-Website"]
+        }
+    }
+
+    statement {
+        sid     = "AllowTaggingForProjectResources"
+        effect  = "Allow"
+        actions = [
+            "ec2:CreateTags",
+            "ec2:DeleteTags",
+            "elasticloadbalancing:AddTags",
+            "elasticloadbalancing:RemoveTags",
+            "dynamodb:TagResource",
+            "dynamodb:UntagResource"
+        ]
+        resources = ["*"]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:RequestTag/Project"
+            values = ["Personal-Website"]
+        }
+    }
+
+    statement {
+        sid     = "AllowTaggingForProjectResourcesByResourceTag"
+        effect  = "Allow"
+        actions = [
+            "ec2:CreateTags",
+            "ec2:DeleteTags",
+            "elasticloadbalancing:AddTags",
+            "elasticloadbalancing:RemoveTags",
+            "dynamodb:TagResource",
+            "dynamodb:UntagResource"
+        ]
+        resources = ["*"]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:ResourceTag/Project"
+            values = ["Personal-Website"]
+        }
+    }
+
+    statement {
+        sid     = "AllowTaggingDuringResourceCreation"
+        effect  = "Allow"
+        actions = ["ec2:CreateTags"]
+        resources = [
+            "arn:aws:ec2:*:*:volume/*",
+            "arn:aws:ec2:*:*:instance/*",
+            "arn:aws:ec2:*:*:network-interface/*"
+        ]
+        condition {
+            test     = "StringEquals"
+            variable = "ec2:CreateAction"
+            values = ["RunInstances", "CreateVolume"]
         }
     }
     // need StateBackendAccess here declared for user permissions

@@ -8,7 +8,7 @@ resource "aws_route_table" "Terraform_VPC-pub-RT" {
     }
 
     tags = {
-        Name = "Terraform_VPC-pub-RT"
+        Name    = "Terraform_VPC-pub-RT"
         Project = var.project
     }
 }
@@ -27,7 +27,7 @@ resource "aws_route_table" "Terraform_VPC-priv-RT" {
         nat_gateway_id = aws_nat_gateway.nat.id
     }
     tags = {
-        Name = "Terraform_VPC-priv-RT"
+        Name    = "Terraform_VPC-priv-RT"
         Project = var.project
     }
 }

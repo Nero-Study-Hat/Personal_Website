@@ -22,8 +22,8 @@ variable "private_subnet_id" {
     default     = ""
 }
 
-# variable "security_group_id" {
-#     description = "Security group used by VPC the server will be placed in"
-#     type        = string
-#     default     = ""
-# }
+variable "security_group_id" {
+    description = "Security group used by server"
+    type        = string
+    default     = ""
+}

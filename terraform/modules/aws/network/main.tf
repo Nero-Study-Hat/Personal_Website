@@ -5,7 +5,7 @@ resource "aws_vpc" "Terraform_VPC" {
     enable_dns_support   = "true"
     enable_dns_hostnames = "true"
     tags = {
-        Name = "Terraform_VPC"
+        Name    = "Terraform_VPC"
         Project = var.project
     }
 }
@@ -14,7 +14,7 @@ resource "aws_vpc" "Terraform_VPC" {
 resource "aws_internet_gateway" "Terraform_VPC-IGW" {
     vpc_id = aws_vpc.Terraform_VPC.id
     tags = {
-        Name = "Terraform_VPC-IGW"
+        Name    = "Terraform_VPC-IGW"
         Project = var.project
     }
 }
@@ -25,6 +25,9 @@ resource "aws_subnet" "Terraform_VPC-pub" {
     cidr_block              = "10.0.1.0/24"
     map_public_ip_on_launch = "true"
     availability_zone       = var.zone
+    tags = {
+        Project = var.project
+    }
 }
 
 # Private Subnet
@@ -33,6 +36,9 @@ resource "aws_subnet" "Terraform_VPC-priv" {
     cidr_block              = "10.0.4.0/24"
     map_public_ip_on_launch = "true"
     availability_zone       = var.zone
+    tags = {
+        Project = var.project
+    }
 }
 
 # NAT Gateway elastic ip
@@ -53,6 +59,29 @@ resource "aws_nat_gateway" "nat" {
         Project = var.project
     }
     depends_on = [aws_internet_gateway.Terraform_VPC-IGW]
+}
+
+// minimal sg for private instance in subnet behind nat-gateway
+resource "aws_security_group" "private_instance" {
+    name        = "private-instance-sg"
+    description = "Security group for private subnet instances"
+    vpc_id      = aws_vpc.Terraform_VPC.id
+
+    # Allow all outbound traffic (this is the default behavior)
+    egress {
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+        description = "Allow all outbound traffic"
+    }
+
+    # No ingress rules needed - Tailscale handles SSH access
+    # and the instance is in a private subnet
+    tags = {
+        Name    = "private-instance-sg"
+        Project = var.project
+    }
 }
 
 # Security group for Tailscale client in public subnet for direct connections

@@ -1,3 +1,15 @@
+variable "project" {
+    type        = string
+    description = "Project name for tags"
+    default     = "Personal-Website"
+}
+
+variable "environment" {
+    type        = string
+    description = "Environment name for tags"
+    default     = "dev"
+}
+
 # AWS region where resources will be created.
 variable "region" {
     default = "us-east-1" # Default AWS region
