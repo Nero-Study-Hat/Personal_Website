@@ -146,7 +146,8 @@ data "aws_iam_policy_document" "dev-personal-website" {
             "ec2:AllocateAddress",
             "ec2:CreateVolume",
             "elasticloadbalancing:Create*",
-            "dynamodb:CreateTable"
+            "dynamodb:CreateTable",
+            "ec2:DisassociateAddress"
         ]
         resources = ["*"]
         condition {
