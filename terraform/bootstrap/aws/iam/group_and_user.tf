@@ -10,15 +10,15 @@ module "iam_group-iam-controllers" {
 
     # these are defaults but I want them here explicitly for awareness
     enable_self_management_permissions = true
-    enable_mfa_enforcement             = true
     create_policy                      = true
+    # note: after setting up MFA must sign out and back into have permissions
+    enable_mfa_enforcement             = true
 
     policies = {
         IAMFullAccess               = "arn:aws:iam::aws:policy/IAMFullAccess",
         # Console & Intergration Permissions Needed Alongside IAMFullAccess
         AWSOrganizationsFullAccess  = "arn:aws:iam::aws:policy/AWSOrganizationsFullAccess",
         IAMAccessAnalyzerFullAccess = "arn:aws:iam::aws:policy/IAMAccessAnalyzerFullAccess"
-
     }
 
     tags = {
@@ -38,8 +38,9 @@ module "iam_group-developers" {
 
     # these are defaults but I want them here explicitly for awareness
     enable_self_management_permissions = true
-    enable_mfa_enforcement             = true
     create_policy                      = true
+    # note: after setting up MFA must sign out and back into have permissions
+    enable_mfa_enforcement             = true
 
     permissions = {
         AssumeRole = {
@@ -47,6 +48,13 @@ module "iam_group-developers" {
             resources = [
                 module.iam_role-dev-personal-website.arn
             ]
+        },
+        BrowserLogin = {
+            actions  = [
+                "signin:AuthorizeOAuth2Access",
+                "signin:CreateOAuth2Token"
+            ] // for login with awscli2 `aws login`
+            resources = ["*"]
         }
     }
 
