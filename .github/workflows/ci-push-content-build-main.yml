@@ -10,7 +10,7 @@ on:
       - "site/push-content/blog/**"
 
 jobs:
-  docs-build:
+  site-main-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,14 +24,14 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: site/push-content/blog/package-lock.json
+          cache-dependency-path: site/push-content/main/package-lock.json
 
       # Install dependencies
       - name: Install npm dependencies
-        working-directory: site/push-content/blog/
+        working-directory: site/push-content/main/
         run: npm ci
 
       # Vitepress build
-      - name: Build Vitepress site
-        working-directory: site/push-content/blog/
-        run: npx vitepress build
+      - name: Build astro site
+        working-directory: site/push-content/main/
+        run: npm run build
