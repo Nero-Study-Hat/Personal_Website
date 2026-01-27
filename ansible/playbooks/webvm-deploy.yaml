@@ -1,0 +1,34 @@
+- name: Deploy to aws-server host
+  hosts: webvm
+  gather_facts: true
+
+  tasks:
+    - name: Load Sops Secrets
+      community.sops.load_vars:
+        file: "{{ playbook_dir }}/../../secrets/secrets.yaml"
+        name: sops_secrets
+        expressions: ignore  # explicitly do not evaluate expressions
+                            # on load (this is the default)
+
+    - name: Include Public Network Role
+      include_role:
+        name: public_network_center
+      vars:
+        docker_dir: "{{host_docker_dir}}"
+        project_name: "network_center"
+        network_backend: "{{ public_network_center.network_backend }}"
+        TRAEFIK_DASHBOARD_CREDENTIALS: "{{ sops_secrets.TRAEFIK_DASHBOARD_CREDENTIALS }}"
+        desec_api_token: "{{ sops_secrets.desec_api_token }}"
+        public_domains: "{{ host_public_domains }}"
+        traefik_domain: "{{ public_network_center.traefik_domain }}"
+        networks: "{{host_networks}}"
+    
+    - name: Include Nginx File Server Role
+      include_role:
+        name: nginx_file_server
+      vars:
+        docker_dir: "{{host_docker_dir}}"
+        project_name: "nginx_file_server"
+        network_backend: "{{ nginx_file_server.network_backend }}"
+        public_domains: "{{ host_public_domains }}"
+        site_paths: "{{ host_site_paths }}"

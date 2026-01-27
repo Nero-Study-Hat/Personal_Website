@@ -9,6 +9,7 @@
     "Hosts": [
         "day",
         "dusk",
-        "night"
+        "night",
+        "webvm"
     ]
 }

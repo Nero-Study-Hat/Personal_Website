@@ -1,9 +1,9 @@
 myhosts:
   hosts:
     webvm:
-        ansible_host:
+        ansible_host: 100.84.38.22
         ansible_become: yes
         ansible_become_method: sudo
         ansible_connection: ssh
-        ansible_user: ansible
-        ansible_python_interpreter: "/usr/bin/python3.11"
+        ansible_user: root
+        # ansible_python_interpreter: "/usr/bin/python3.11"

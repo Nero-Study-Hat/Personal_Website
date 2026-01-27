@@ -24,7 +24,12 @@
     src: "nginx.conf"
     dest: "{{stack_dir}}/nginx.conf"
 
-
+- name: copying files with playbook
+  become: true 
+  copy:
+    src: "../../site-build/{{ item }}"
+    dest: "{{site_location}}/"
+  loop: "{{ site_paths }}"
 
 ### DEPLOY ###
 - name: Deploy Docker Compose Stack

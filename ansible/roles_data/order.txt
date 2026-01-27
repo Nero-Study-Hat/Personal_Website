@@ -1,0 +1,4 @@
+debian_server
+local_dns
+public_network_center
+nginx_file_server

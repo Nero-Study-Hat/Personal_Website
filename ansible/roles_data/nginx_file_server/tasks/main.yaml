@@ -1,0 +1,6 @@
+- name: copying files with playbook
+  become: true 
+  copy:
+    src: "../../site-build/{{ item }}"
+    dest: "{{site_location}}/"
+  loop: "{{ site_paths }}"

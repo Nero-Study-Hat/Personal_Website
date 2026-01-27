@@ -1,11 +1,10 @@
 ### HANDLE SECRETS WORK ###
 
-- name: Create .env file with traefik dashboard credentials and ts_authkey
+- name: Create .env file with traefik dashboard credentials
   ansible.builtin.copy:
     dest: "{{stack_dir}}/.env"
     content: |
       TRAEFIK_DASHBOARD_CREDENTIALS={{ TRAEFIK_DASHBOARD_CREDENTIALS }}
-      TS_AUTHKEY={{ ts_auth_key }}
 
 - name: Create api_token file
   ansible.builtin.copy:
@@ -34,10 +33,3 @@
     ipam_config: "{{ item.ipam_options }}"
   loop: "{{ networks.traefik_specific | default([], true) }}"
   when: networks.traefik_specific is not none
-
-- name: Create tailscale specific networks
-  community.docker.docker_network:
-    name: "{{ item.name }}"
-    ipam_config: "{{ item.ipam_options }}"
-  loop: "{{ networks.tailscale_specific | default([], true) }}"
-  when: networks.tailscale_specific is not none

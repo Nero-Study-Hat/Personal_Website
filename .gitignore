@@ -49,3 +49,7 @@ terraform.rc
 
 # Ignore secrets dir
 /secrets
+
+# Ignore site build dir, needed temporarily
+# while getting full CI/CD pipeline online
+/site-build

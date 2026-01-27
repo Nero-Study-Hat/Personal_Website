@@ -1,19 +1,22 @@
-### EXPENSEOWL SERVICE SPECIFIC VARS ###
+### NGINX SERVICE SPECIFIC VARS ###
 
 nginx_file_server:
   name: "nginx_file_server"
   network_backend:
-    name: "t3_expenseowl"
+    name: "t3_nginx"
     ipam_options:
-    - subnet: "10.110.32.0/29"
-      gateway: "10.110.32.1"
+    - subnet: "10.100.32.0/29"
+      gateway: "10.100.32.1"
     traefik_ips:
-      traefik: "10.110.32.2"
-      expenseowl: "10.110.32.3"
+      traefik: "10.100.32.2"
+      nginx: "10.100.32.3"
 
-site_path_in_repo: "site"
-site_paths:
+# host_site_path_in_repo: "site-build"
+
+site_location: "/var/www/html"
+
+host_site_paths:
 - "main"
 - "blog"
 - "homelab"
-- "homelab-tools"
+# - "homelab-tools"

@@ -1,21 +1,3 @@
-tls:
-  options:
-    # Set default for a minimum of TLS v1.2 with the most secure ciphers; the browser can negotiate to TLS v1.3 if preferred.
-    default:
-      minVersion: VersionTLS12
-      cipherSuites:
-        # Recommended ciphers for TLSv1.2
-        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
-        # Recommended ciphers for TLSv1.3
-        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
-    # Custom option for only TLS v1.3; if browser does not support TLS v1.3, the page will fail to load.
-    tlsv13only:
-      minVersion: VersionTLS13
-
 http:
   middlewares:
     # Enabled Secure headers
@@ -51,20 +33,4 @@ http:
 
     # Allow compressed content with Zstandard, Brotli, or Gzip
     response-compress:
-      compress:
-        compress: {}
-
-certificatesResolvers:
-  desec:
-    acme:
-      email: nerostudyhat@protonmail.com
-      storage: acme.json
-      caServer: https://acme-v02.api.letsencrypt.org/directory # prod (default)
-      # caServer: https://acme-staging-v02.api.letsencrypt.org/directory # staging
-      dnsChallenge: 
-        provider: desec
-        resolvers:
-          - "1.1.1.1:53"
-          - "1.0.0.1:53"
-        propagation:
-          delayBeforeChecks: 30s  # Give deSEC time to propagate
+      compress: {}

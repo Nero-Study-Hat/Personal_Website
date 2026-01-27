@@ -1,25 +1,23 @@
 ### NETWORK CENTER ###
 
 host_networks:
-  shared:
   traefik_specific: # these containers don't have Tailscale DNS and connection-ability
 ### TRAEFIK SERVICE SPECIFIC VARS ###
 
-network_center:
+public_network_center:
   network_backend:
-    name: "traefik_tailscale"
+    name: "public_tailscale"
     ipam_options:
-    - subnet: "10.140.0.0/29"
-      gateway: "10.140.0.1"
-    ips:
-      traefik: "10.140.0.2"
-      tailscale: "10.140.0.4"
+    - subnet: "10.100.0.0/29"
+      gateway: "10.100.0.1"
+    traefik_ips:
+      traefik: "10.100.0.2"
   traefik_domain: "traefik.webvm.wiresndreams.dev"
 
 # domains for ssl
 # remember to setup CAA and A records
-public_domains:
+host_public_domains:
 - "dev.wiresndreams.dev"
 - "dev.blog.wiresndreams.dev"
 - "dev.homelab.wiresndreams.dev"
-- "dev.tools.homelab.wiresndreams.dev"
+# - "dev.tools.homelab.wiresndreams.dev"

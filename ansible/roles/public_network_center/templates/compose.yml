@@ -6,7 +6,7 @@ services:
     container_name: socketproxy
     network_mode: "none"
     read_only: true
-    user: "0:994"
+    user: "0:999"
     volumes:
       - "/run/docker.sock:/run/docker.sock:ro"
       - "socket-proxy:/run/proxy" # this socket is run as 1000:1000, not as root
@@ -23,8 +23,8 @@ services:
     security_opt:
       - no-new-privileges:true
     ports:
-      - "80/tcp"
-      - "443/tcp"
+      - "80:80/tcp"
+      - "443:443/tcp"
       # - "9100"
     networks:
       {%- for net in networks.shared | default([], true) +%}
@@ -59,25 +59,26 @@ services:
           memory: 128M  # Reserve 128MB RAM
     labels:
       - "traefik.enable=true"
-      - "traefik.docker.network=traefik_tailscale"
-      - "traefik.http.routers.traefik.entrypoints=http"
-      - "traefik.http.routers.traefik.rule=Host(`{{domains.traefik}}`)"
+      - "traefik.docker.network=public_tailscale"
+      - "traefik.http.routers.traefik.entrypoints=web"
+      - "traefik.http.routers.traefik.rule=Host(`{{traefik_domain}}`)"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
-      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=websecure"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
 
-      - "traefik.http.routers.traefik-secure.entrypoints=https"
-      - "traefik.http.routers.traefik-secure.rule=Host(`{{domains.traefik}}`)"
+      - "traefik.http.routers.traefik-secure.entrypoints=websecure"
+      - "traefik.http.routers.traefik-secure.rule=Host(`{{traefik_domain}}`)"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.service=api@internal"
-      
+
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=desec"
-      - "traefik.http.routers.traefik-secure.tls.options=tlsv13only"
+      # - "traefik.http.routers.traefik-secure.tls.options=tlsv13only" # will fix one day
       {%- for domain in public_domains +%}
       - "traefik.http.routers.traefik-secure.tls.domains[{{ loop.index0 }}].main={{ domain }}"
       {%- endfor +%}
+      - "traefik.http.routers.traefik-secure.tls.domains[4].main={{traefik_domain}}"
 
 secrets:
   desec_api_token:

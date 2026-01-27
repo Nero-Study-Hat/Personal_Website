@@ -1,9 +1,8 @@
 {
     "ProjectName": "public_network_center",
-    "NetworkSetup": "shared",
+    "NetworkSetup": "t3_only",
     "UserGateDetails": {},
     "DirectoriesToCreate": [
-        "tailscale",
         "traefik/data"
     ],
     "TemplatesRemoteRelativePaths": {
