@@ -15,3 +15,9 @@ variable "project" {
     description = "Project name for tags"
     default     = "Personal-Website"
 }
+
+variable "account_id" {
+    type        = string
+    description = "Used for ARN values."
+    default     = "767398065040"
+}

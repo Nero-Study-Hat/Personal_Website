@@ -18,7 +18,7 @@ provider "aws" {
     default_tags {
         tags = {
             Environment = "aws-dev"
-            Project     = "personal-website"
+            Project     = "Personal-Website"
         }
     }
 }
