@@ -47,9 +47,11 @@ nginx_file_server:
       traefik: "10.100.32.2"
       nginx: "10.100.32.3"
 
-# host_site_path_in_repo: "site-build"
+host_site_location:
+  remote: "/var/www/html"
+  local: "site-build"
 
-site_location: "/var/www/html"
+
 
 host_site_paths:
 - "main"

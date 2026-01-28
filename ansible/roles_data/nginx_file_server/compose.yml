@@ -6,7 +6,7 @@ services:
       {{network_backend.name}}:
         ipv4_address: "{{network_backend.traefik_ips.nginx}}"
     volumes:
-      - {{site_location}}:/app
+      - {{site_location.remote}}:/app
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
     environment:
       - NGINX_HOST=localhost
@@ -17,6 +17,7 @@ services:
       - "traefik.zone.main=true"
       - "traefik.docker.network={{network_backend.name}}"
       # FIXME: only last rule with this approach applies
+      - "traefik.http.routers.{{project_name}}.rule=Host(`{{ host_public_domains | join('`) || Host(`') }}`)"
       {%- for domain in public_domains +%}
       - "traefik.http.routers.{{project_name}}.rule=Host(`{{domain}}`)"
       {%- endfor +%}

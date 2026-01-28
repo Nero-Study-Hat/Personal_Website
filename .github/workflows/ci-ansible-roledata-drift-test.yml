@@ -18,11 +18,11 @@ jobs:
       - name: Checkout current repository
         uses: actions/checkout@v4
         with:
-          ref: feat/v1-safe-end-services
+          ref: mvp
 
       - name: Checkout Service Config Generator repository
         run: |
-          git clone https://github.com/Nero-Study-Hat/Homelab-Tools.git
+          git clone https://github.com/Daniel-Giszpenc/Homelab-Tools.git
           mv "Homelab-Tools" "tools-repo"
 
       - name: Create build output directory for the tool
