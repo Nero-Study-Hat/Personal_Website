@@ -94,7 +94,7 @@ module "iam_role-dev-personal-website" {
 
     # TrustGithubActionsToAssume
     enable_github_oidc = true
-    oidc_subjects = ["repo:Nero-Study-Hat/Personal_Website:ref:refs/heads/mvp"]
+    oidc_subjects = ["repo:Daniel-Giszpenc/Personal_Website:ref:refs/heads/mvp"]
     oidc_audiences = ["sts.amazonaws.com"]
 
     trust_policy_permissions = {

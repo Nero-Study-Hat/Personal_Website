@@ -366,7 +366,7 @@ Finally thank you for reading and have a good day wherever you are in the world.
 ### An overview of the work prompted by this article.
 
 Note when I bring up Ansible role and Docker Compose this is relevant to how I am doing things in my project.
-https://github.com/Nero-Study-Hat/Homelab
+https://github.com/Daniel-Giszpenc/Homelab
 
 #### Work to do for [[My General & Homelab Tools Plan#Personal Knowledge & Self Management Cloud|Personal Knowledge & Self Management Cloud]]
 - [x] Configure Remnote (already long done)

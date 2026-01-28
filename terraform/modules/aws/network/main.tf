@@ -76,6 +76,24 @@ resource "aws_security_group" "private_instance" {
         description = "Allow all outbound traffic"
     }
 
+    # Allow HTTP from Tailscale
+    ingress {
+        from_port   = 80
+        to_port     = 80
+        protocol    = "tcp"
+        cidr_blocks = ["100.64.0.0/10"]
+        description = "HTTP from Tailscale"
+    }
+
+    # Allow HTTPS from Tailscale
+    ingress {
+        from_port   = 443
+        to_port     = 443
+        protocol    = "tcp"
+        cidr_blocks = ["100.64.0.0/10"]
+        description = "HTTPS from Tailscale"
+    }
+
     # No ingress rules needed - Tailscale handles SSH access
     # and the instance is in a private subnet
     tags = {
