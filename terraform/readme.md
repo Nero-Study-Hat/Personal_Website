@@ -30,11 +30,10 @@ Environments and modules tree:
 ```
 terrraform/
   envs/
-    aws-low-cost/
-    aws-professional/
-    oracle-free/
-    oracle-professional/
-    proxmox/
+    lab-aws/
+    mvp-aws/
+    regular-boosted/
+    regular-free/
   modules/
     common/
     aws/
@@ -42,31 +41,29 @@ terrraform/
     proxmox/
 ```
 
-My approach for the off premise Cloud providers is to the split them into separate environments for "low-cost" and "professional".
+The environment are separated by a first word classifier.
+- mvp: very first setup being pushed out due to demand
+- lab: experimental environments where services with significant over time cost can be used due to ephemeral lab-env nature
+- regular: environments where public facing content is hosted on the regular
+  - free: is for completely free standard deployment model
+  - boosted: uses free resources base to significantly lower cost with a few additional paid resources on top for more professional environment that can handled longer in regards to cost
 
-The purpose of this split is make continous experimentation and learning an option without fear of cost in the "professional" environments where their resources don't stay up for long. Meanwhile the "low-cost" environments provide a place to comfortably host public facing content long term. 
+The purpose of this split is make continous experimentation and learning an option without fear of cost in the "lab" environments where their resources don't stay up for long.
 
-#### More Detailed Breakdown
+Meanwhile the "regular" environments provide a place to more comfortably host public facing content long term. 
 
-- aws-low-cost
-  - This environment provides a cost learning environment with AWS and fail over option for my public facing contents' infrastructure.
-- aws-professional
-  - This provides a labbing ground with AWS to learn, experiment, and demonstrate acquired skills.
-- oracle-free
-  - This allows long term full time deployment of the content I have that I wish to be public facing with the monetary resources at my disposal.
-- oracle-professional
-  - This environment will provide more rich capability when I want that at a lower cost than the aws-professional environment.
-- Proxmox:
-  - This provides a fully private testing ground on x86 (Oracle will be on ARM) which makes this a good environment for quick small experiment ideas.
+This classification model separates by purpose name instead of provider to support multi-cloud setups.
 
-Note that each of these environments should
-- Always be easy to deploy to either major environment at the manual trigger of a Github Actions workflow.
-- Aways be easy to change to the chosen main major environment used for hosting my public facing content with my main domain in my Github Actions CI/CD setup.
+With these environments it should always be to
+- Deploy to any of the major environment at the trigger of a Github Actions workflow.
+- Change the chosen main major environment set in my automatic CI/CD pipeline used for my public facing content on my main domain.
 
 
 ### Where modules come in.
 
 There is a specific modules directory so code re-use is clear, especially for common modules shared across major environments.
+
+Here directories are split by provider for logical separation of functionality to be re-used when working per provider.
 
 #TODO: continue this docs section
 
