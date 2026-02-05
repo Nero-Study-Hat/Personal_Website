@@ -13,17 +13,19 @@ variable "tailscale_auth_key" {
 variable "aws_region" {
     description = "AWS region"
     type        = string
-    default     = "us-east-1"
 }
 
-variable "private_subnet_id" {
+variable "server_subnet_id" {
     description = "ID of the subnet the server will be placed in"
     type        = string
-    default     = ""
 }
 
 variable "security_group_id" {
     description = "Security group used by server"
     type        = string
-    default     = ""
+}
+
+variable "server_eip_id" {
+    description = "EIP used by server"
+    type        = string
 }

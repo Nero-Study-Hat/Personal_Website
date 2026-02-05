@@ -26,7 +26,7 @@ provider "aws" {
         session_name = "terraform-dev"
     }
 
-    region = var.region
+    region = var.aws_region
 
     // default_tags don't interact with api in same way
     // as tags at the resource block level so they are
@@ -44,9 +44,12 @@ data "sops_file" "sops-secret" {
 }
 
 module "network" {
-    source  = "../../modules/aws/network"
-    project = var.project
-    zone    = "us-east-1a" 
+    source             = "../../modules/aws/vpc"
+    project            = var.project
+    az_zone            = var.az_zone 
+    vpc_cidr           = var.vpc_cidr
+    public_subnet_cidr = var.public_subnet_cidr
+    ingress_cidr       = ["0.0.0.0/0"] # ["100.64.0.0/10"]
 }
 
 module "server" {
@@ -54,7 +57,9 @@ module "server" {
     project            = var.project
     tailscale_auth_key = data.sops_file.sops-secret.data["aws_server_ts_auth_key"]
     aws_region         = "us-east-1"
-    private_subnet_id  = module.network.private_subnet_id
-    security_group_id  = module.network.minimal_security_group_id
+    server_subnet_id   = module.network.server_subnet_id
+    security_group_id  = module.network.security_group_id
+    server_eip_id      = module.network.server_eip_id
 }
 
+#TODO: add output for public ip address of server

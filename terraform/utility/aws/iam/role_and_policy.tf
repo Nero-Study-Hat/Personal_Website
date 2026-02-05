@@ -283,6 +283,46 @@ data "aws_iam_policy_document" "dev-personal-website" {
         }
     }
 
+    # for associating and disassociating when everything is tagged
+    statement {
+        sid     = "AllowEIPOperations"
+        effect  = "Allow"
+        actions = [
+            "ec2:AssociateAddress",
+            "ec2:DisassociateAddress"
+        ]
+        resources = [
+            "arn:aws:ec2:*:*:instance/*",
+            "arn:aws:ec2:*:*:elastic-ip/*",
+            "arn:aws:ec2:*:*:network-interface/*"
+        ]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:ResourceTag/Project"
+            values   = ["Personal-Website"]
+        }
+    }
+
+    # for disassociating from untagged NICs (like NAT Gateway)
+    statement {
+        sid     = "AllowEIPDisassociateFromAnyNI"
+        effect  = "Allow"
+        actions = ["ec2:DisassociateAddress"]
+        resources = ["arn:aws:ec2:*:*:network-interface/*"]
+    }
+
+    statement {
+        sid     = "AllowEIPDisassociateTaggedEIP"
+        effect  = "Allow"
+        actions = ["ec2:DisassociateAddress"]
+        resources = ["arn:aws:ec2:*:*:elastic-ip/*"]
+        condition {
+            test     = "StringEquals"
+            variable = "aws:ResourceTag/Project"
+            values   = ["Personal-Website"]
+        }
+    }
+
     statement {
         sid     = "AllowTaggingForProjectResources"
         effect  = "Allow"

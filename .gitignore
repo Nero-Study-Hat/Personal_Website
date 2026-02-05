@@ -9,12 +9,26 @@
 crash.log
 crash.*.log
 
+### Regardging TFVARS ###
+
+# Recommendation:
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
 # password, private keys, and other secrets. These should not be part of version 
 # control as they are data points which are potentially sensitive and subject 
 # to change depending on the environment.
-*.tfvars
-*.tfvars.json
+
+# My approach and reasoning:
+# Not gitignoring tfvars because the whole point of that operation would be if
+# secrets are or are planned to be stored in tfvars file which is not the case
+# for my setup. Current secrets will be pulled from SOPS (encrypted file not in Git)
+# and future secrets will be able to take advantage of TF_VAR_* environment variables
+# so they will be pulled into those and used that way. This tfvars aren't used for
+# secret management and storage which feels wrong.
+
+# *.tfvars
+# *.tfvars.json
+
+### ----------------- ###
 
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in

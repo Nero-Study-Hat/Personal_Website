@@ -18,22 +18,3 @@ resource "aws_route_table_association" "Terraform_VPC-pub" {
     subnet_id      = aws_subnet.Terraform_VPC-pub.id
     route_table_id = aws_route_table.Terraform_VPC-pub-RT.id
 }
-
-# Private Route Table with NAT Gateway route
-resource "aws_route_table" "Terraform_VPC-priv-RT" {
-    vpc_id = aws_vpc.Terraform_VPC.id
-    route {
-        cidr_block     = "0.0.0.0/0"
-        nat_gateway_id = aws_nat_gateway.nat.id
-    }
-    tags = {
-        Name    = "Terraform_VPC-priv-RT"
-        Project = var.project
-    }
-}
-
-# Associate Private Subnet with Route Table
-resource "aws_route_table_association" "private" {
-    subnet_id      = aws_subnet.Terraform_VPC-priv.id
-    route_table_id = aws_route_table.Terraform_VPC-priv-RT.id
-}
