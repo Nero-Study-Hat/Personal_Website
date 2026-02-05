@@ -21,4 +21,4 @@ host_site_paths:
 - "main"
 - "blog"
 - "homelab"
-# - "homelab-tools"
+- "homelab-tools"

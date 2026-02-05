@@ -32,3 +32,4 @@
         network_backend: "{{ nginx_file_server.network_backend }}"
         public_domains: "{{ host_public_domains }}"
         site_paths: "{{ host_site_paths }}"
+        site_location: "{{ host_site_location }}"

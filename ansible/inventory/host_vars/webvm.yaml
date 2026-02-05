@@ -28,10 +28,10 @@ public_network_center:
 # domains for ssl
 # remember to setup CAA and A records
 host_public_domains:
-- "dev.wiresndreams.dev"
-- "dev.blog.wiresndreams.dev"
-- "dev.homelab.wiresndreams.dev"
-# - "dev.tools.homelab.wiresndreams.dev"
+- "wiresndreams.dev"
+- "blog.wiresndreams.dev"
+- "homelab.wiresndreams.dev"
+- "tools.homelab.wiresndreams.dev"
 
 
 ### NGINX SERVICE SPECIFIC VARS ###
@@ -57,4 +57,4 @@ host_site_paths:
 - "main"
 - "blog"
 - "homelab"
-# - "homelab-tools"
+- "homelab-tools"
