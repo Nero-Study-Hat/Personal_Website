@@ -24,12 +24,19 @@
 				packages = with pkgs; [
 					terraform
 					ansible
-					sops
+
+                    open-policy-agent
+                    awscli2
+                    
+                    conftest
+                    act
+					
+                    sops
 					age
+                    
                     nodejs_25
                     yarn
-                    act
-                    awscli2
+                    
                     python3
 				];
 
