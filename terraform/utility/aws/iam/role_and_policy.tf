@@ -130,145 +130,13 @@ module "iam_role-dev-personal-website" {
     }
 }
 
+// NOTE:
+// strict checking here comes from OPA validation in central CI
+// that is where strict tagging requirements are enforced because
+// AWS has poor tag policy management support and OPA is better at it
 data "aws_iam_policy_document" "dev-personal-website" {
     statement {
-        sid     = "AllowCreateWithCorrectProjectTag"
-        effect  = "Allow"
-        actions = [
-            "ec2:CreateVpc",
-            "ec2:CreateInternetGateway",
-            "ec2:AttachInternetGateway",
-            "ec2:CreateSubnet",
-            "ec2:CreateNatGateway",
-            "ec2:CreateRouteTable",
-            "ec2:CreateRoute",
-            "ec2:AssociateRouteTable",
-            "ec2:AllocateAddress",
-            "ec2:CreateVolume",
-            "elasticloadbalancing:Create*",
-            "dynamodb:CreateTable",
-            "ec2:DisassociateAddress"
-        ]
-        resources = ["*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:RequestTag/Project"
-            values = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid       = "AllowCreateSecurityGroupWithTag"
-        effect    = "Allow"
-        actions   = ["ec2:CreateSecurityGroup"]
-        resources = ["arn:aws:ec2:*:*:security-group/*"]
-        // condition breaks
-        # condition {
-        #     test     = "StringEquals"
-        #     variable = "aws:RequestTag/Project"
-        #     values   = ["Personal-Website"]
-        # }
-    }
-
-    statement {
-        sid       = "AllowCreateSecurityGroupInVpc"
-        effect    = "Allow"
-        actions   = ["ec2:CreateSecurityGroup"]
-        resources = ["arn:aws:ec2:*:*:vpc/*"]
-    }
-
-    statement {
-        sid     = "AllowSecurityGroupRuleManagement"
-        effect  = "Allow"
-        actions = [
-            "ec2:AuthorizeSecurityGroupEgress",
-            "ec2:AuthorizeSecurityGroupIngress",
-            "ec2:RevokeSecurityGroupEgress",
-            "ec2:RevokeSecurityGroupIngress"
-        ]
-        resources = ["arn:aws:ec2:*:*:security-group/*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:ResourceTag/Project"
-            values   = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid     = "AllowRunInstancesWithProjectTag"
-        effect  = "Allow"
-        actions = [
-            "ec2:RunInstances"
-        ]
-        resources = [
-            "arn:aws:ec2:*:*:instance/*",
-            "arn:aws:ec2:*:*:volume/*"
-        ]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:RequestTag/Project"
-            values   = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid     = "AllowRunInstancesOnSupportingResources"
-        effect  = "Allow"
-        actions = [
-            "ec2:RunInstances"
-        ]
-        resources = [
-            "arn:aws:ec2:*:*:subnet/*",
-            "arn:aws:ec2:*:*:network-interface/*",
-            "arn:aws:ec2:*:*:security-group/*",
-            "arn:aws:ec2:*:*:key-pair/*",
-            "arn:aws:ec2:*:*:image/*"
-        ]
-    }
-
-    statement {
-        sid     = "AllowRunInstancesOnVolumes"
-        effect  = "Allow"
-        actions = ["ec2:RunInstances"]
-        resources = ["arn:aws:ec2:*:*:volume/*"]
-    }
-
-    statement {
-        sid     = "AllowDescribeOperations"
-        effect  = "Allow"
-        actions = [
-            // make res when created visible to terraform
-            "ec2:Describe*",
-            "elasticloadbalancing:Describe*",
-            "dynamodb:Describe*",
-            "dynamodb:List*"
-        ]
-        resources = ["*"]
-    }
-
-    // note: if no sec group added to an instance, one with
-    // no tag will be attempted to be added and the terraform
-    // apply will break, always use a minimal sg to prevent default issue
-    statement {
-        sid     = "DenyCreateWithoutProjectTag"
-        effect  = "Deny"
-        actions = [
-            "ec2:CreateVpc",
-            "ec2:AllocateAddress",
-            "ec2:CreateVolume",
-            "elasticloadbalancing:Create*",
-            "dynamodb:CreateTable"
-        ]
-        resources = ["*"]
-        condition {
-            test     = "Null"
-            variable = "aws:RequestTag/Project"
-            values = ["true"]
-        }
-    }
-
-    statement {
-        sid     = "AllowOperateOnlyOnTaggedResources"
+        sid     = "AllowActions"
         effect  = "Allow"
         actions = [
             "ec2:*",
@@ -276,106 +144,8 @@ data "aws_iam_policy_document" "dev-personal-website" {
             "dynamodb:*"
         ]
         resources = ["*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:ResourceTag/Project"
-            values = ["Personal-Website"]
-        }
     }
 
-    # for associating and disassociating when everything is tagged
-    statement {
-        sid     = "AllowEIPOperations"
-        effect  = "Allow"
-        actions = [
-            "ec2:AssociateAddress",
-            "ec2:DisassociateAddress"
-        ]
-        resources = [
-            "arn:aws:ec2:*:*:instance/*",
-            "arn:aws:ec2:*:*:elastic-ip/*",
-            "arn:aws:ec2:*:*:network-interface/*"
-        ]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:ResourceTag/Project"
-            values   = ["Personal-Website"]
-        }
-    }
-
-    # for disassociating from untagged NICs (like NAT Gateway)
-    statement {
-        sid     = "AllowEIPDisassociateFromAnyNI"
-        effect  = "Allow"
-        actions = ["ec2:DisassociateAddress"]
-        resources = ["arn:aws:ec2:*:*:network-interface/*"]
-    }
-
-    statement {
-        sid     = "AllowEIPDisassociateTaggedEIP"
-        effect  = "Allow"
-        actions = ["ec2:DisassociateAddress"]
-        resources = ["arn:aws:ec2:*:*:elastic-ip/*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:ResourceTag/Project"
-            values   = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid     = "AllowTaggingForProjectResources"
-        effect  = "Allow"
-        actions = [
-            "ec2:CreateTags",
-            "ec2:DeleteTags",
-            "elasticloadbalancing:AddTags",
-            "elasticloadbalancing:RemoveTags",
-            "dynamodb:TagResource",
-            "dynamodb:UntagResource"
-        ]
-        resources = ["*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:RequestTag/Project"
-            values = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid     = "AllowTaggingForProjectResourcesByResourceTag"
-        effect  = "Allow"
-        actions = [
-            "ec2:CreateTags",
-            "ec2:DeleteTags",
-            "elasticloadbalancing:AddTags",
-            "elasticloadbalancing:RemoveTags",
-            "dynamodb:TagResource",
-            "dynamodb:UntagResource"
-        ]
-        resources = ["*"]
-        condition {
-            test     = "StringEquals"
-            variable = "aws:ResourceTag/Project"
-            values = ["Personal-Website"]
-        }
-    }
-
-    statement {
-        sid     = "AllowTaggingDuringResourceCreation"
-        effect  = "Allow"
-        actions = ["ec2:CreateTags"]
-        resources = [
-            "arn:aws:ec2:*:*:volume/*",
-            "arn:aws:ec2:*:*:instance/*",
-            "arn:aws:ec2:*:*:network-interface/*"
-        ]
-        condition {
-            test     = "StringEquals"
-            variable = "ec2:CreateAction"
-            values = ["RunInstances", "CreateVolume"]
-        }
-    }
     // need StateBackendAccess here declared for user permissions
     // because assume_role is not working with backend config
     statement {
@@ -394,14 +164,6 @@ data "aws_iam_policy_document" "dev-personal-website" {
             "arn:aws:s3:::terraform-state-backend-0iw5ulc1",
             "arn:aws:s3:::terraform-state-backend-0iw5ulc1/*"
         ]
-    }
-    statement {
-        sid = "AllowAmiDiscovery"
-        actions = [
-            "ec2:DescribeImages",
-            "ec2:DescribeImageAttribute"
-        ]
-        resources = ["*"]
     }
 }
 

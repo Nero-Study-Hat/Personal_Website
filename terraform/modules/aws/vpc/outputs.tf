@@ -19,4 +19,7 @@ output "server_eip_id" {
     value       = aws_eip.server.id
 }
 
-#TODO: output server EIP to be used for DNS
+output "server_eip_address" {
+    description = "Server EIP address used for DNS A records."
+    value       = aws_eip.server.address
+}
