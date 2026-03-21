@@ -27,7 +27,7 @@ export default defineConfigWithTheme<BlogliorelliTheme>({
     nav: [
       { text: "Home", link: "/" },
       { text: "Tags", link: "/tags" },
-      { text: "Notes", link: "https://notes.wiresndreams.dev" },
+    //   { text: "Notes", link: "https://notes.wiresndreams.dev" },
     ],
 
     search: {
@@ -35,7 +35,7 @@ export default defineConfigWithTheme<BlogliorelliTheme>({
       options: { detailedView: true, disableQueryPersistence: true },
     },
 
-    socialLinks: [{ icon: "github", link: "https://github.com/migliorelli" }],
+    socialLinks: [{ icon: "github", link: "https://github.com/Daniel-Giszpenc" }],
 
     outline: {
       level: [2, 3], // Show h2 and h3 headings
