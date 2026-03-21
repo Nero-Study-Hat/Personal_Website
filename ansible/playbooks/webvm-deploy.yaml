@@ -19,7 +19,7 @@
         network_backend: "{{ public_network_center.network_backend }}"
         TRAEFIK_DASHBOARD_CREDENTIALS: "{{ sops_secrets.TRAEFIK_DASHBOARD_CREDENTIALS }}"
         desec_api_token: "{{ sops_secrets.desec_api_token }}"
-        public_domains: "{{ host_public_domains }}"
+        all_public_domains: "{{ host_all_public_domains }}"
         traefik_domain: "{{ public_network_center.traefik_domain }}"
         networks: "{{host_networks}}"
     
@@ -30,6 +30,26 @@
         docker_dir: "{{host_docker_dir}}"
         project_name: "nginx_file_server"
         network_backend: "{{ nginx_file_server.network_backend }}"
-        public_domains: "{{ host_public_domains }}"
+        all_public_domains: "{{ host_all_public_domains }}"
+        static_site_domains: "{{ host_static_site_domains }}"
+        resume_domain: "{{ host_resume_domain }}"
         site_paths: "{{ host_site_paths }}"
         site_location: "{{ host_site_location }}"
+        resume_file_name: "{{ host_resume_file_name }}"
+
+
+    # - name: site update - copying static site content
+    #   copy:
+    #     src: "../../{{host_site_location.local}}/{{ item }}"
+    #     dest: "{{host_site_location.remote}}/"
+    #   loop: "{{ host_site_paths }}"
+
+    # - name: site update - copying resume file
+    #   copy:
+    #     src: "../../{{host_site_location.local}}/resume/{{ host_resume_file_name }}"
+    #     dest: "{{host_site_location.remote}}/resume/{{ host_resume_file_name }}"
+
+    # - name: site update - copying static site content
+    #   copy:
+    #     src: "../../{{host_site_location.local}}/blog"
+    #     dest: "{{host_site_location.remote}}/blog"

@@ -75,7 +75,7 @@ services:
       - "traefik.http.routers.traefik-secure.tls=true"
       - "traefik.http.routers.traefik-secure.tls.certresolver=desec"
       # - "traefik.http.routers.traefik-secure.tls.options=tlsv13only" # will fix one day
-      {%- for domain in public_domains +%}
+      {%- for domain in all_public_domains +%}
       - "traefik.http.routers.traefik-secure.tls.domains[{{ loop.index0 }}].main={{ domain }}"
       {%- endfor +%}
       - "traefik.http.routers.traefik-secure.tls.domains[4].main={{traefik_domain}}"

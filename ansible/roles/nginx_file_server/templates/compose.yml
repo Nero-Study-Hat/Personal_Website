@@ -16,7 +16,7 @@ services:
       - "traefik.enable=true"
       - "traefik.zone.main=true"
       - "traefik.docker.network={{network_backend.name}}"
-      - "traefik.http.routers.{{project_name}}.rule=Host(`{{ host_public_domains | join('`) || Host(`') }}`)"
+      - "traefik.http.routers.{{project_name}}.rule=Host(`{{ all_public_domains | join('`) || Host(`') }}`)"
       - "traefik.http.routers.{{project_name}}.entrypoints=websecure"
       - "traefik.http.routers.{{project_name}}.tls=true"
       - "traefik.http.routers.{{project_name}}.tls.certresolver=desec"

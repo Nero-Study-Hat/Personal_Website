@@ -13,7 +13,7 @@ http:
           - GET
           - POST
         accessControlAllowOriginList:
-          {%- for domain in public_domains +%}
+          {%- for domain in all_public_domains +%}
           - {{ domain }}
           {%- endfor +%}
         accessControlMaxAge: 100

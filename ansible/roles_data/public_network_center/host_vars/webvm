@@ -16,8 +16,9 @@ public_network_center:
 
 # domains for ssl
 # remember to setup CAA and A records
-host_public_domains:
+host_all_public_domains:
 - "wiresndreams.dev"
+- "resume.wiresndreams.dev"
 - "blog.wiresndreams.dev"
 - "homelab.wiresndreams.dev"
 - "tools.homelab.wiresndreams.dev"

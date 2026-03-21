@@ -24,12 +24,23 @@
     src: "nginx.conf"
     dest: "{{stack_dir}}/nginx.conf"
 
-- name: copying files with playbook
+- name: copying static site content
   become: true 
   copy:
     src: "../../{{site_location.local}}/{{ item }}"
     dest: "{{site_location.remote}}/"
   loop: "{{ site_paths }}"
+
+- name: Creates resume directory
+  ansible.builtin.file:
+    path: '{{site_location.remote}}/resume'
+    state: directory
+
+- name: copying resume file
+  become: true
+  copy:
+    src: "../../{{site_location.local}}/resume/{{ resume_file_name }}"
+    dest: "{{site_location.remote}}/resume/{{ resume_file_name }}"
 
 ### DEPLOY ###
 - name: Deploy Docker Compose Stack

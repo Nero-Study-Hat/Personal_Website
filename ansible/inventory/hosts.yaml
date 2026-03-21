@@ -1,7 +1,7 @@
 myhosts:
   hosts:
     webvm:
-        ansible_host: 100.86.194.17
+        ansible_host: 100.95.141.52
         ansible_become: yes
         ansible_become_method: sudo
         ansible_connection: ssh

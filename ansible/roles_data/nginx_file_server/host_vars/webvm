@@ -15,10 +15,18 @@ host_site_location:
   remote: "/var/www/html"
   local: "site-build"
 
+host_static_site_domains:
+- "wiresndreams.dev"
+- "blog.wiresndreams.dev"
+- "homelab.wiresndreams.dev"
+- "tools.homelab.wiresndreams.dev"
 
+host_resume_domain: "resume.wiresndreams.dev"
 
 host_site_paths:
 - "main"
 - "blog"
 - "homelab"
 - "homelab-tools"
+
+host_resume_file_name: "Giszpenc_Daniel.pdf"
