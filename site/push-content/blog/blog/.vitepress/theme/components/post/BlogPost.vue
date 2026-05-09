@@ -3,11 +3,21 @@
     <a :href="regularPath">
       <div class="blog-post-title">{{ title }}</div>
       <div class="blog-post-date">{{ getFormattedDate(date) }}</div>
+      <div class="blog-post-tags">
+        <ul class="post-tags">
+            <li class="post-tag" v-for="tag in tags" :key="tag">
+            {{ tag }}
+            </li>
+        </ul>
+      </div>
     </a>
   </li>
 </template>
 
 <script setup lang="ts">
+import { useData } from "vitepress";
+const { page } = useData();
+
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import localizedFormat from "dayjs/plugin/localizedFormat";
@@ -19,6 +29,7 @@ interface Props {
   regularPath: string;
   title: string;
   date: string;
+  tags: string[];
 }
 
 defineProps<Props>();
@@ -56,5 +67,24 @@ function getFormattedDate(date: string) {
 .blog-post-date {
   color: var(--vp-c-text-2);
   font-size: 0.9em;
+}
+
+.post-tags {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.post-tag {
+  padding: 0.125rem 0.625rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+
+  color: white;
+  background-color: var(--vp-c-brand-3);
 }
 </style>

@@ -31,7 +31,7 @@ function _compareDate(posta: any, postb: any) {
 
 async function getPostPaths() {
   const paths = await globby(["**.md"], {
-    ignore: ["node_modules", "README.md"],
+    ignore: ["node_modules", "README.md", "**/early-concepts/**", "**/drafts/**"],
   });
 
   return paths.filter((item) => item.includes("posts/"));

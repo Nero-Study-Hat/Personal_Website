@@ -24,6 +24,7 @@
       :regular-path="post.regularPath"
       :title="post.data.title"
       :date="post.data.date"
+      :tags="post.data.tags"
     />
   </ul>
 

@@ -1,5 +1,7 @@
 ---
 title: My General & Homelab Tools Plan
+tags:
+  - reflection
 ---
 
 ### Shaping this Article

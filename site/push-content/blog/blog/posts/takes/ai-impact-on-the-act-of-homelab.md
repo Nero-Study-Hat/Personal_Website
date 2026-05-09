@@ -1,9 +1,9 @@
 ---
 title: AI Impact on the Act of Homelab
 date: 3/20/2026
+tags:
+  - takes
 ---
-# AI Impact on the Act of Homelab
-
 
 I saw the below post on LinkedIn and it got me thinking (enough that I exceeded the LinkedIn comment character limit and am posting this here).
 

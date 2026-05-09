@@ -1,6 +1,9 @@
 ---
 title: "Lessons for Past Me: Identity"
 date: 2/14/2026
+tags:
+  - early-concepts
+  - takes
 ---
 > [!important]  Writeup Outline
 > Sync up what the article is talking about and thinking of regarding identity and what you think the article is talking about.
@@ -152,7 +155,7 @@ Infrastructure needs receipts like that as well bringing us to the next industry
 > [!note] QUOTE: PORTNOX
 > Non-repudiation in cybersecurity is a security principle that ensures no one can deny their actions or involvement in a digital transaction, communication, or data exchange.
 > - **Proof of Origin**: Confirms the identity of the sender. The sender cannot later deny sending a specific message or performing a specific action.
-> - **Proof of Delivery/Receipt**:Confirms that the intended recipient received the information. The recipient cannot claim they never got it.
+> - **Proof of Delivery/Receipt**: Confirms that the intended recipient received the information. The recipient cannot claim they never got it.
 > - **Integrity Protection**: Ensures that the message or transaction has not been altered during transmission. If tampering occurs, it can be detected.
 
 > To learn more go to:

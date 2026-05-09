@@ -1,5 +1,7 @@
 ---
 title: Relearning how I use GitHub for personal projects.
+tags:
+  - reflection
 ---
 
 ### What led me to this change after using GitHub for a few years already?
